@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class Principal {
                 .collect(Collectors.toList());
 
             // imprimir aniversariantes em outubro e dezembro
-            aniversariantes.forEach(f -> System.out.println("Aniversariante: " + f.getNome()));
+            aniversariantes.forEach(f -> System.out.println("aniversariantes de outubro e dezembro: " + f.getNome()));
 
             System.out.println();
 
@@ -96,5 +97,32 @@ public class Principal {
                                 + maisVelho.getNome() + ", idade: "
                                 + idadeMaisVelho + " anos");
             }
+             // ordenando por nome
+            List<Funcionario> funcionariosOrdenados = funcionarios.stream()
+                .sorted(Comparator.comparing(Funcionario::getNome))
+                .collect(Collectors.toList());
+
+            // imprimindo a lista ordenada
+             System.out.println("\n Funcionários por ordem alfabética: ");
+             funcionariosOrdenados.forEach(f -> System.out.println(f.getNome()));
+
+             // calculando o total dos salários
+            BigDecimal totalSalarios = funcionarios.stream()
+                .map(Funcionario::getSalario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // imprimindo o total dos salários
+            System.out.println("\n Total dos salários: R$" + totalSalarios.setScale(2, RoundingMode.HALF_UP).toString().replace(".", ","));
+
+            // salário mínimo
+             BigDecimal salarioMinimo = new BigDecimal("1212.00");
+
+            // calculando, quantos salários mínimos ganha cada um dos funcionarios
+             System.out.println("\n salarios mínimos por funcionário:");
+             funcionarios.forEach(f -> {BigDecimal numeroSalariosMinimos = f.getSalario().divide(salarioMinimo, 2, RoundingMode.HALF_UP);
+            System.out.println(f.getNome() + ": " + numeroSalariosMinimos + " salários mínimos");
+        });
+
+
     }
 }
